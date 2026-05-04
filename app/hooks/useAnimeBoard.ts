@@ -9,6 +9,7 @@ export function useAnimeBoard() {
   const [lmb, setLMB] = useState(false);
   const [rmb, setRMB] = useState(false);
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
+  const [spacePressed, setSpacePressed] = useState(false);
 
   const eraseCell = (index: number) => {
     const newCells = [...cells];
@@ -27,7 +28,9 @@ export function useAnimeBoard() {
   };
 
   const handleMove = (clientX: number, clientY: number, isLMB: boolean, isRMB: boolean) => {
+    if (spacePressed) return;
     if (!isLMB && !isRMB) return;
+    
     const target = document.elementFromPoint(clientX, clientY) as HTMLElement;
     const cellIndex = target?.closest('[data-index]')?.getAttribute('data-index');
     if (cellIndex !== null && cellIndex !== undefined) {
@@ -72,9 +75,33 @@ export function useAnimeBoard() {
     return () => window.removeEventListener("mouseup", handleMouseUp);
   }, []);
 
+  useEffect(() => {
+    const handleDown = (e: KeyboardEvent) => {
+      if (e.key === " " && (e.target as HTMLElement).tagName !== "INPUT") {
+        setSpacePressed(true);
+      }
+    };
+    const handleUp = (e: KeyboardEvent) => {
+      if (e.key === " ") setSpacePressed(false);
+    }
+
+    window.addEventListener("keydown", handleDown);
+    window.addEventListener("keyup", handleUp);
+    return () => {
+      window.removeEventListener("keydown", handleDown);
+      window.removeEventListener("keyup", handleUp);
+    }
+    
+  }, [])
+
   return {
-    boardRef, cells, query, setQuery, results, setResults,
-    activeBrush, setActiveBrush, lmb, setLMB, rmb, setRMB,
+    boardRef, cells,
+    query, setQuery,
+    results, setResults,
+    activeBrush, setActiveBrush,
+    lmb, setLMB,
+    rmb, setRMB,
+    spacePressed, setSpacePressed,
     handleMove, downloadBoard
   };
 }

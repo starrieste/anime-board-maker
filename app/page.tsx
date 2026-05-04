@@ -5,13 +5,21 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 export default function Home() {
   const { 
-    boardRef, cells, query, setQuery, results, setResults, 
-    setActiveBrush, lmb, setLMB, rmb, setRMB, handleMove, downloadBoard 
+    boardRef, cells,
+    query, setQuery,
+    results, setResults, 
+    setActiveBrush,
+    lmb, setLMB,
+    rmb, setRMB,
+    spacePressed, setSpacePressed,
+    handleMove, downloadBoard
   } = useAnimeBoard();
 
   return (
     <main
-      className="relative w-screen h-screen overflow-hidden bg-[#0f0f0f]"
+      className={`relative w-screen h-screen overflow-hidden bg-[#0f0f0f] ${
+        spacePressed ? "cursor-grab active:cursor-grabbing" : "cursor-crosshair"
+        }`}
     >
       
       <nav className="fixed top-0 left-0 right-0 h-16 bg-black/80 backdrop-blur-md border-b border-gray-800 z-50 flex items-center justify-between px-8">
@@ -56,11 +64,11 @@ export default function Home() {
       
       <TransformWrapper
         panning={{ activationKeys: [" "] }}
-        initialScale={0.8}
+        initialScale={0.6}
         centerOnInit={true}
         minScale={0.2}
         maxScale={8}
-        limitToBounds={true}
+        limitToBounds={false}
         zoomAnimation={{ disabled: true }}
       >
         <TransformComponent wrapperClass="!w-screen !h-screen">

@@ -5,6 +5,7 @@ interface BoardProps {
   cols: number;
   lmb: boolean;
   rmb: boolean;
+  spacePressed: boolean;
   setLMB: (val: boolean) => void;
   setRMB: (val: boolean) => void;
   handleMove: (x: number, y: number, l: boolean, r: boolean) => void;
