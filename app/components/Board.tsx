@@ -1,6 +1,8 @@
 interface BoardProps {
   boardRef: React.RefObject<HTMLDivElement | null>;
   cells: any[];
+  rows: number;
+  cols: number;
   lmb: boolean;
   rmb: boolean;
   setLMB: (val: boolean) => void;
@@ -8,14 +10,20 @@ interface BoardProps {
   handleMove: (x: number, y: number, l: boolean, r: boolean) => void;
 }
 
-export function Board({ boardRef, cells, lmb, rmb, setLMB, setRMB, handleMove }: BoardProps) {
+export function Board({ boardRef, cells, rows, cols, lmb, rmb, setLMB, setRMB, handleMove }: BoardProps) {
+  const cellWidth = 160;
+  const gap = 8;
+
+  const totalWidth = (cols * cellWidth) + ((cols - 1) * gap)
+  
   return (
     <div ref={boardRef} className="bg-black p-2 w-fit mx-auto border-4 border-white">
       <div className="bg-white">
         <h1 className="text-4xl text-center text-black p-2">My Anime Board</h1>
       </div>
       <div 
-        className="grid bg-black grid-cols-5 pt-2 gap-2 mx-auto select-none"
+        className="grid bg-black grid-cols-5 pt-2 gap-2 mx-auto select-none w-[820px]"
+        style={{ gridAutoRows: 'min-content' }}
         onContextMenu={(e) => e.preventDefault()}
         onMouseDown={(e) => {
           const isLMB = e.button === 0;
