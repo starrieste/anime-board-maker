@@ -11,6 +11,7 @@ export default function Home() {
     setActiveBrush,
     lmb, setLMB,
     rmb, setRMB,
+    mmb, setMMB,
     spacePressed, setSpacePressed,
     handleMove, downloadBoard
   } = useAnimeBoard();
@@ -28,7 +29,11 @@ export default function Home() {
         </div>
 
         <button 
-          onClick={downloadBoard} 
+          onClick={(e) => {
+            e.stopPropagation();
+            downloadBoard();
+            (e.target as HTMLButtonElement).blur();
+          }}
           className="text-sm bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-full transition-all active:scale-95 font-medium"
         >
           Download
@@ -63,24 +68,33 @@ export default function Home() {
       </div>
       
       <TransformWrapper
-        panning={{ activationKeys: [" "] }}
+        panning={{
+          disabled: !(spacePressed || mmb),
+          allowLeftClickPan: true,
+          allowMiddleClickPan: true,
+          excluded: ["input", "button"]
+        }}
+        onWheelStart={() => {}}
         initialScale={0.6}
         centerOnInit={true}
-        minScale={0.2}
-        maxScale={8}
+        minScale={0.5}
+        maxScale={2}
         limitToBounds={false}
-        zoomAnimation={{ disabled: true }}
+        smooth={false}
+        wheel={{ step: 0.1 }}
       >
         <TransformComponent wrapperClass="!w-screen !h-screen">
-          <div className="p-[1000px]">
-            <Board 
-            boardRef={boardRef} 
-            cells={cells} 
-            lmb={lmb} setLMB={setLMB} 
-            rmb={rmb} setRMB={setRMB} 
-            handleMove={handleMove} 
-            />
-          </div>
+          <Board 
+          boardRef={boardRef} 
+          cells={cells}
+          rows={5}
+          cols={5}
+          lmb={lmb} setLMB={setLMB} 
+          rmb={rmb} setRMB={setRMB} 
+          mmb={mmb} setMMB={setMMB}
+          spacePressed={spacePressed}
+          handleMove={handleMove} 
+          />
         </TransformComponent>
       </TransformWrapper>
     </main>

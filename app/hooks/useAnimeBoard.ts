@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { domToPng } from 'modern-screenshot';
+import { domToJpeg } from "modern-screenshot/dist/index.cjs";
 
 export function useAnimeBoard() {
   const boardRef = useRef<HTMLDivElement>(null);
@@ -8,6 +8,7 @@ export function useAnimeBoard() {
   const [results, setResults] = useState<any[]>([]);
   const [lmb, setLMB] = useState(false);
   const [rmb, setRMB] = useState(false);
+  const [mmb, setMMB] = useState(false);
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
 
@@ -29,6 +30,7 @@ export function useAnimeBoard() {
 
   const handleMove = (clientX: number, clientY: number, isLMB: boolean, isRMB: boolean) => {
     if (spacePressed) return;
+    if (mmb) return;
     if (!isLMB && !isRMB) return;
     
     const target = document.elementFromPoint(clientX, clientY) as HTMLElement;
@@ -53,12 +55,46 @@ export function useAnimeBoard() {
     const data = await response.json();
     setResults(data.data.Page.characters);
   }
-
+  
   async function downloadBoard() {
     if (!boardRef.current) return;
-    const dataUrl = await domToPng(boardRef.current, { quality: 1, scale: 2 });
+  
+    const dataUrl = await domToJpeg(boardRef.current, {
+      quality: 0.9,
+      scale: 2,
+      
+      width: boardRef.current.offsetWidth,
+      height: boardRef.current.offsetHeight,
+      
+      onCloneNode: (node) => {
+        const el = node as HTMLElement;
+  
+        el.style.transform = 'none';
+        el.style.margin = '0';
+        el.style.padding = '1';
+        el.style.display = 'flex';
+        el.style.flexDirection = 'column';
+  
+        const titleDiv = el.children[0] as HTMLElement;
+        if (titleDiv) {
+          titleDiv.style.marginTop = '0px'; 
+        }
+
+        const titleText = titleDiv.children[0] as HTMLElement;
+        if (titleText) {
+          titleText.style.marginTop = '1px';
+        }
+  
+        const gridDiv = el.querySelector('.grid') as HTMLElement;
+        if (gridDiv) {
+          gridDiv.style.transform = 'none';
+          gridDiv.style.marginTop = '0px'; 
+        }
+      },
+    });
+  
     const link = document.createElement("a");
-    link.download = "anime-board.png";
+    link.download = "anime-board.jpg";
     link.href = dataUrl;
     link.click();
   }
@@ -70,7 +106,11 @@ export function useAnimeBoard() {
   }, [query]);
 
   useEffect(() => {
-    const handleMouseUp = () => { setLMB(false); setRMB(false); };
+    const handleMouseUp = () => {
+      setLMB(false);
+      setRMB(false);
+      setMMB(false);
+    };
     window.addEventListener("mouseup", handleMouseUp);
     return () => window.removeEventListener("mouseup", handleMouseUp);
   }, []);
@@ -101,6 +141,7 @@ export function useAnimeBoard() {
     activeBrush, setActiveBrush,
     lmb, setLMB,
     rmb, setRMB,
+    mmb, setMMB,
     spacePressed, setSpacePressed,
     handleMove, downloadBoard
   };
