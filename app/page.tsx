@@ -56,6 +56,7 @@ export default function Home() {
             {results.map((char, i) => (
               <button
                 key={i}
+                draggable="false"
                 onClick={() => setActiveBrush(char)}
                 className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
               >

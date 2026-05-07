@@ -12,27 +12,33 @@ export function useAnimeBoard() {
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
 
+  const stateRef = useRef({ activeBrush, spacePressed, mmb });
+  useEffect(() => {
+    stateRef.current = { activeBrush, spacePressed, mmb };
+  }, [activeBrush, spacePressed, mmb]);
+
   const eraseCell = (index: number) => {
-    const newCells = [...cells];
-    newCells[index] = { name: "", image: "" };
-    setCells(newCells);
+    setCells(prev => {
+      const newCells = [...prev];
+      newCells[index] = { name: "", image: "" };
+      return newCells;
+    });
   };
 
   const paintCell = (index: number) => {
-    if (!activeBrush) return;
-    const newCells = [...cells];
-    newCells[index] = {
-      name: activeBrush.name.full,
-      image: activeBrush.image.large
-    };
-    setCells(newCells);
+    const currentBrush = stateRef.current.activeBrush;
+    if (!currentBrush) return;
+    setCells(prev => {
+      const newCells = [...prev];
+      newCells[index] = { name: currentBrush.name.full, image: currentBrush.image.large };
+      return newCells;
+    });
   };
 
   const handleMove = (clientX: number, clientY: number, isLMB: boolean, isRMB: boolean) => {
-    if (spacePressed) return;
-    if (mmb) return;
+    if (stateRef.current.spacePressed || stateRef.current.mmb) return;
     if (!isLMB && !isRMB) return;
-    
+  
     const target = document.elementFromPoint(clientX, clientY) as HTMLElement;
     const cellIndex = target?.closest('[data-index]')?.getAttribute('data-index');
     if (cellIndex !== null && cellIndex !== undefined) {
@@ -41,7 +47,7 @@ export function useAnimeBoard() {
       else if (isRMB) eraseCell(idx);
     }
   };
-
+  
   async function searchCharacters() {
     if (!query) return;
     const response = await fetch('https://graphql.anilist.co', {
@@ -111,25 +117,41 @@ export function useAnimeBoard() {
     };
 
     const handleMouseDown = (e: MouseEvent) => {
+      if (e.button === 0 && !spacePressed) setLMB(true);
       if (e.button === 1) setMMB(true);
-    };
+      if (e.button === 2) setRMB(true);
 
+      handleMove(e.clientX, e.clientY, e.button === 0, e.button === 2);
+    };
+    
     const handleMouseUp = (e: MouseEvent) => {
       setLMB(false);
       setRMB(false);
       setMMB(false);
     };
 
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    const handleDragStart = (e: DragEvent) => {
+      setLMB(false);
+    };
+
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("contextmenu", handleContextMenu);
+    window.addEventListener("dragstart", handleDragStart);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("contextmenu", handleContextMenu);
+      window.removeEventListener("dragstart", handleDragStart);
     };
   }, []);
 
