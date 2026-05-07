@@ -40,31 +40,37 @@ export default function Home() {
         </button>
       </nav>
 
-      <div className="fixed top-20 left-0 right-0 z-40 flex flex-col items-center pointer-events-none">
-        <input 
-        className="pointer-events-auto text-white p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
-        placeholder="Search..."
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          if (e.target.value.trim() === "") setResults([]);
-        }}
-        />
-
-        <div className="flex gap-4 p-4 overflow-x-auto pb-4 w-full max-w-4xl custom-scrollbar">
-          {results.map((char, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveBrush(char)}
-              className="pointer-events-auto flex-none w-32 group flex flex-col items-center gap-2 transition-transform hover:scale-105"
-            >
-              <div className="w-full h-44 overflow-hidden rounded-lg border-2 border-gray-700 group-hover:border-blue-400 transition-colors">
-                <img src={char.image.large} alt={char.name.full} className="w-full h-full object-cover" />
-              </div>
-              <p className="text-xs text-center font-medium truncate w-full">{char.name.full}</p>
-            </button>
-          ))}
+      <aside className="fixed top-16 left-0 w-96 h-[calc(100vh-4rem)] bg-black/90 border-r border-gray-800 z-30 overflow-y-auto p-4">
+        <div className="items-center p-4 flex flex-col gap-4">
+          <input 
+          className="pointer-events-auto text-white p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
+          placeholder="Search..."
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (e.target.value.trim() === "") setResults([]);
+          }}
+          />
+  
+          <div className="grid grid-cols-2 overflow-y-auto max-h-128 justify-items-center gap-4 p-4 pb-4 w-80 custom-scrollbar">
+            {results.map((char, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveBrush(char)}
+                className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
+              >
+                <div className="w-full h-44 overflow-hidden rounded-lg border-2 border-gray-700 group-hover:border-blue-400 transition-colors">
+                  <img src={char.image.large} alt={char.name.full} className="w-full h-full object-cover" />
+                </div>
+                <p className="text-xs text-center font-medium truncate w-full">{char.name.full}</p>
+              </button>
+            ))}
+          </div>
+          
         </div>
+      </aside>
+
+      <div className="fixed top-20 left-0 right-0 z-40 flex flex-col items-center pointer-events-none">
       </div>
       
       <TransformWrapper
