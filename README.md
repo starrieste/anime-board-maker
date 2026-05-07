@@ -1,4 +1,4 @@
-# Kuwa Anime Boards
+# Kiyo Anime Boards
 
 Modern anime board creation site! :3
 

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kuwa - Anime Boards",
+  title: "Kiyo - Anime Boards",
   description: "A new site to make your anime/character boards!",
 };
 

@@ -25,7 +25,7 @@ export default function Home() {
       
       <nav className="fixed top-0 left-0 right-0 h-16 bg-black/80 backdrop-blur-md border-b border-gray-800 z-50 flex items-center justify-between px-8">
         <div className="flex items-baseline gap-2">
-          <h1 className="text-2xl font-bold">Kuwa :3</h1>
+          <h1 className="text-2xl font-bold">Kiyo :3</h1>
         </div>
 
         <button 
@@ -41,7 +41,7 @@ export default function Home() {
       </nav>
 
       <aside className="fixed top-16 left-0 w-96 h-[calc(100vh-4rem)] bg-black/90 border-r border-gray-800 z-30 overflow-y-auto p-4">
-        <div className="items-center p-4 flex flex-col gap-4">
+        <div className="items-center p-4 flex flex-col gap-4 border-2 rounded-xl border-gray-700">
           <input 
           className="pointer-events-auto text-white p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
           placeholder="Search..."
@@ -52,31 +52,32 @@ export default function Home() {
           }}
           />
   
-          <div className="grid grid-cols-2 overflow-y-auto max-h-128 justify-items-center gap-4 p-4 pb-4 w-80 custom-scrollbar">
-            {results.map((char, i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  const img = new Image()
-                  img.crossOrigin = "anonymous"
-                  img.src = char.image.large
-                  setActiveBrush(char)
-                }}
-                className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
-              >
-                <div className="w-full h-44 overflow-hidden rounded-lg border-2 border-gray-700 group-hover:border-blue-400 transition-colors">
-                  <img
-                    src={char.image.large}
-                    alt={char.name.full}
-                    className="w-full h-full object-cover"
-                    draggable="false"
-                  />
-                </div>
-                <p className="text-xs text-center font-medium truncate w-full">{char.name.full}</p>
-              </button>
-            ))}
-          </div>
-          
+          {results.length > 0 && (
+            <div className="grid grid-cols-2 overflow-y-auto max-h-128 justify-items-center gap-4 p-4 pb-4 w-80 custom-scrollbar">
+              {results.map((char, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    const img = new Image()
+                    img.crossOrigin = "anonymous"
+                    img.src = char.image.large
+                    setActiveBrush(char)
+                  }}
+                  className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
+                >
+                  <div className="w-full h-44 overflow-hidden rounded-lg border-2 border-gray-700 group-hover:border-blue-400 transition-colors">
+                    <img
+                      src={char.image.large}
+                      alt={char.name.full}
+                      className="w-full h-full object-cover"
+                      draggable="false"
+                    />
+                  </div>
+                  <p className="text-xs text-center font-medium truncate w-full">{char.name.full}</p>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </aside>
 
