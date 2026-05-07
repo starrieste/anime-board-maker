@@ -117,6 +117,10 @@ export function useAnimeBoard() {
     };
 
     const handleMouseDown = (e: MouseEvent) => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      
       if (e.button === 0 && !spacePressed) setLMB(true);
       if (e.button === 1) setMMB(true);
       if (e.button === 2) setRMB(true);

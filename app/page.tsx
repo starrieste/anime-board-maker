@@ -57,7 +57,12 @@ export default function Home() {
               <button
                 key={i}
                 draggable="false"
-                onClick={() => setActiveBrush(char)}
+                onClick={() => {
+                  const img = new Image()
+                  img.crossOrigin = "anonymous"
+                  img.src = char.image.large
+                  setActiveBrush(char)
+                }}
                 className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
               >
                 <div className="w-full h-44 overflow-hidden rounded-lg border-2 border-gray-700 group-hover:border-blue-400 transition-colors">
