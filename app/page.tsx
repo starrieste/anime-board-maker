@@ -13,6 +13,7 @@ export default function Home() {
     rmb, setRMB,
     mmb, setMMB,
     spacePressed, setSpacePressed,
+    boardTitle, setBoardTitle,
     handleMove, downloadBoard
   } = useAnimeBoard();
 
@@ -27,6 +28,17 @@ export default function Home() {
         <div className="flex items-baseline gap-2">
           <h1 className="text-2xl font-bold">Kiyo :3</h1>
         </div>
+
+        <input
+          placeholder="Board title..."
+          value={boardTitle}
+          onChange={(e) => {
+            setBoardTitle(e.target.value);
+            if (e.target.value.trim() === "") setBoardTitle("");
+          }}
+          className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
+        />
+          
 
         <button 
           onClick={(e) => {
@@ -103,15 +115,16 @@ export default function Home() {
       >
         <TransformComponent wrapperClass="!w-screen !h-screen">
           <Board 
-          boardRef={boardRef} 
-          cells={cells}
-          rows={5}
-          cols={5}
-          lmb={lmb} setLMB={setLMB} 
-          rmb={rmb} setRMB={setRMB} 
-          mmb={mmb} setMMB={setMMB}
-          spacePressed={spacePressed}
-          handleMove={handleMove} 
+            boardRef={boardRef} 
+            cells={cells}
+            rows={5}
+            cols={5}
+            lmb={lmb} setLMB={setLMB} 
+            rmb={rmb} setRMB={setRMB} 
+            mmb={mmb} setMMB={setMMB}
+            spacePressed={spacePressed}
+            handleMove={handleMove} 
+            boardTitle={boardTitle}
           />
         </TransformComponent>
       </TransformWrapper>

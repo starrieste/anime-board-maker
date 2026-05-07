@@ -11,9 +11,23 @@ interface BoardProps {
   setRMB: (val: boolean) => void;
   setMMB: (val: boolean) => void;
   handleMove: (x: number, y: number, l: boolean, r: boolean) => void;
+  boardTitle: string;
 }
 
-export function Board({ boardRef, cells, rows, cols, lmb, rmb, setLMB, setRMB, setMMB, handleMove, spacePressed }: BoardProps) {
+export function Board({
+  boardRef,
+  cells,
+  rows,
+  cols,
+  lmb,
+  rmb,
+  setLMB,
+  setRMB,
+  setMMB,
+  handleMove,
+  spacePressed,
+  boardTitle
+}: BoardProps) {
   const cellWidth = 160;
   const cellHeight = 230;
   const gap = 8;
@@ -25,7 +39,7 @@ export function Board({ boardRef, cells, rows, cols, lmb, rmb, setLMB, setRMB, s
   return (
     <div ref={boardRef} className="bg-black p-2 w-fit mx-auto border-4 border-white">
       <div className="bg-white">
-        <h1 className="text-4xl text-center text-black p-2">My Anime Board</h1>
+        <h1 className="text-4xl text-center text-black p-2">{boardTitle || "My Anime Board"}</h1>
       </div>
       <div 
         className="grid bg-black grid-cols-5 pt-2 gap-2 mx-auto select-none"

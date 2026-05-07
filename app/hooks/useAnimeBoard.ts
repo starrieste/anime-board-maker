@@ -11,6 +11,7 @@ export function useAnimeBoard() {
   const [mmb, setMMB] = useState(false);
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
+  const [boardTitle, setBoardTitle] = useState("");
 
   const stateRef = useRef({ activeBrush, spacePressed, mmb });
   useEffect(() => {
@@ -173,6 +174,7 @@ export function useAnimeBoard() {
     lmb, setLMB,
     rmb, setRMB,
     mmb, setMMB,
+    boardTitle, setBoardTitle,
     spacePressed, setSpacePressed,
     handleMove, downloadBoard
   };
