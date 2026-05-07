@@ -3,14 +3,10 @@ interface BoardProps {
   cells: any[];
   rows: number;
   cols: number;
-  lmb: boolean;
-  rmb: boolean;
-  mmb: boolean;
   spacePressed: boolean;
-  setLMB: (val: boolean) => void;
-  setRMB: (val: boolean) => void;
-  setMMB: (val: boolean) => void;
-  handleMove: (x: number, y: number, l: boolean, r: boolean) => void;
+  mouseButtons: { lmb: boolean, rmb: boolean, mmb: boolean }
+  setMouseButtons: (val: { lmb: boolean, mmb: boolean, rmb: boolean }) => void;
+  handleMove: (x: number, y: number, buttons: { lmb: boolean, rmb: boolean}) => void;
   boardTitle: string;
 }
 
@@ -19,11 +15,7 @@ export function Board({
   cells,
   rows,
   cols,
-  lmb,
-  rmb,
-  setLMB,
-  setRMB,
-  setMMB,
+  mouseButtons, setMouseButtons,
   handleMove,
   spacePressed,
   boardTitle
@@ -49,19 +41,13 @@ export function Board({
         }}
         onContextMenu={(e) => e.preventDefault()}
         onMouseDown={(e) => {
-          const isLMB = e.button === 0;
+          const isLMB = e.button === 0 && !spacePressed;
           const isRMB = e.button === 2;
           
-          if (isLMB && !spacePressed) {
-            setLMB(true);
-            handleMove(e.clientX, e.clientY, true, false);
-          }
-          else if (isRMB) {
-            setRMB(true);
-            handleMove(e.clientX, e.clientY, false, true);
-          }
+          setMouseButtons({ ...mouseButtons, lmb: isLMB, rmb: isRMB});
+          handleMove(e.clientX, e.clientY, { lmb: isLMB, rmb: isRMB });
         }}
-        onMouseMove={(e) => handleMove(e.clientX, e.clientY, lmb, rmb)}
+        onMouseMove={(e) => handleMove(e.clientX, e.clientY, mouseButtons)}
       >
         {cells.map((cell, index) => (
           <div key={index} data-index={index} className="w-40 h-50 bg-white cursor-crosshair transition-all hover:border-blue-300">

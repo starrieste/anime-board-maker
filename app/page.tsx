@@ -9,9 +9,7 @@ export default function Home() {
     query, setQuery,
     results, setResults, 
     activeBrush, setActiveBrush,
-    lmb, setLMB,
-    rmb, setRMB,
-    mmb, setMMB,
+    mouseButtons, setMouseButtons,
     spacePressed, setSpacePressed,
     boardTitle, setBoardTitle,
     handleMove, downloadBoard
@@ -98,7 +96,7 @@ export default function Home() {
       
       <TransformWrapper
         panning={{
-          disabled: !(spacePressed || mmb),
+          disabled: !(spacePressed || mouseButtons.mmb),
           allowLeftClickPan: true,
           allowMiddleClickPan: true,
           excluded: ["input", "button"],
@@ -119,12 +117,11 @@ export default function Home() {
             cells={cells}
             rows={5}
             cols={5}
-            lmb={lmb} setLMB={setLMB} 
-            rmb={rmb} setRMB={setRMB} 
-            mmb={mmb} setMMB={setMMB}
             spacePressed={spacePressed}
             handleMove={handleMove} 
             boardTitle={boardTitle}
+            mouseButtons={mouseButtons}
+            setMouseButtons={setMouseButtons}
           />
         </TransformComponent>
       </TransformWrapper>

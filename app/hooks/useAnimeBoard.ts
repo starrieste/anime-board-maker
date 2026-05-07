@@ -6,17 +6,15 @@ export function useAnimeBoard() {
   const [cells, setCells] = useState(Array(25).fill({ name: "", image: "" }));
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
-  const [lmb, setLMB] = useState(false);
-  const [rmb, setRMB] = useState(false);
-  const [mmb, setMMB] = useState(false);
+  const [mouseButtons, setMouseButtons] = useState({ lmb: false, rmb: false, mmb: false });
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
   const [boardTitle, setBoardTitle] = useState("");
 
-  const stateRef = useRef({ activeBrush, spacePressed, mmb });
+  const stateRef = useRef({ activeBrush, spacePressed, mouseButtons });
   useEffect(() => {
-    stateRef.current = { activeBrush, spacePressed, mmb };
-  }, [activeBrush, spacePressed, mmb]);
+    stateRef.current = { activeBrush, spacePressed, mouseButtons };
+  }, [activeBrush, spacePressed, mouseButtons]);
 
   const eraseCell = (index: number) => {
     setCells(prev => {
@@ -36,16 +34,18 @@ export function useAnimeBoard() {
     });
   };
 
-  const handleMove = (clientX: number, clientY: number, isLMB: boolean, isRMB: boolean) => {
-    if (stateRef.current.spacePressed || stateRef.current.mmb) return;
-    if (!isLMB && !isRMB) return;
+  const handleMove = (clientX: number, clientY: number, buttons: any) => {
+    const { lmb, rmb } = buttons;
+    
+    if (stateRef.current.spacePressed || stateRef.current.mouseButtons.mmb) return;
+    if (!lmb && !rmb) return;
   
     const target = document.elementFromPoint(clientX, clientY) as HTMLElement;
     const cellIndex = target?.closest('[data-index]')?.getAttribute('data-index');
     if (cellIndex !== null && cellIndex !== undefined) {
       const idx = Number(cellIndex);
-      if (isLMB) paintCell(idx);
-      else if (isRMB) eraseCell(idx);
+      if (lmb) paintCell(idx);
+      else if (rmb) eraseCell(idx);
     }
   };
   
@@ -121,18 +121,13 @@ export function useAnimeBoard() {
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
       }
-      
-      if (e.button === 0 && !spacePressed) setLMB(true);
-      if (e.button === 1) setMMB(true);
-      if (e.button === 2) setRMB(true);
 
-      handleMove(e.clientX, e.clientY, e.button === 0, e.button === 2);
+      setMouseButtons(prev => ({ ...prev, lmb: e.button === 0, mmb: e.button === 1, rmb: e.button === 2 }));
+      handleMove(e.clientX, e.clientY, { lmb: e.button === 0, rmb: e.button === 2 });
     };
     
     const handleMouseUp = (e: MouseEvent) => {
-      setLMB(false);
-      setRMB(false);
-      setMMB(false);
+      setMouseButtons({ lmb: false, mmb: false, rmb: false });
     };
 
     const handleContextMenu = (e: MouseEvent) => {
@@ -140,7 +135,7 @@ export function useAnimeBoard() {
     };
 
     const handleDragStart = (e: DragEvent) => {
-      setLMB(false);
+      setMouseButtons({ lmb: false, rmb: false, mmb: false });
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -171,9 +166,7 @@ export function useAnimeBoard() {
     query, setQuery,
     results, setResults,
     activeBrush, setActiveBrush,
-    lmb, setLMB,
-    rmb, setRMB,
-    mmb, setMMB,
+    mouseButtons, setMouseButtons,
     boardTitle, setBoardTitle,
     spacePressed, setSpacePressed,
     handleMove, downloadBoard
