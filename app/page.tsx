@@ -56,7 +56,6 @@ export default function Home() {
             {results.map((char, i) => (
               <button
                 key={i}
-                draggable="false"
                 onClick={() => {
                   const img = new Image()
                   img.crossOrigin = "anonymous"
@@ -66,7 +65,12 @@ export default function Home() {
                 className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
               >
                 <div className="w-full h-44 overflow-hidden rounded-lg border-2 border-gray-700 group-hover:border-blue-400 transition-colors">
-                  <img src={char.image.large} alt={char.name.full} className="w-full h-full object-cover" />
+                  <img
+                    src={char.image.large}
+                    alt={char.name.full}
+                    className="w-full h-full object-cover"
+                    draggable="false"
+                  />
                 </div>
                 <p className="text-xs text-center font-medium truncate w-full">{char.name.full}</p>
               </button>
