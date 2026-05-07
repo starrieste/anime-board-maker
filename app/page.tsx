@@ -43,8 +43,8 @@ export default function Home() {
       <aside className="fixed top-16 left-0 w-96 h-[calc(100vh-4rem)] bg-black/90 border-r border-gray-800 z-30 overflow-y-auto p-4">
         <div className="items-center p-4 flex flex-col gap-4 border-2 rounded-xl border-gray-700">
           <input 
-          className="pointer-events-auto text-white p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
-          placeholder="Search..."
+          className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
+          placeholder="=ω="
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
