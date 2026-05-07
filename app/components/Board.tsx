@@ -35,12 +35,6 @@ export function Board({ boardRef, cells, rows, cols, lmb, rmb, setLMB, setRMB, s
         }}
         onContextMenu={(e) => e.preventDefault()}
         onMouseDown={(e) => {
-          if (e.button === 1) {
-            e.preventDefault();
-            setMMB(true);
-            return;
-          }
-          
           const isLMB = e.button === 0;
           const isRMB = e.button === 2;
           

@@ -100,39 +100,44 @@ export function useAnimeBoard() {
   }
 
   useEffect(() => {
-    if (query.trim().length === 0) return;
-    const delayDebounceFn = setTimeout(() => { searchCharacters(); }, 500);
-    return () => clearTimeout(delayDebounceFn);
-  }, [query]);
-
-  useEffect(() => {
-    const handleMouseUp = () => {
-      setLMB(false);
-      setRMB(false);
-      setMMB(false);
-    };
-    window.addEventListener("mouseup", handleMouseUp);
-    return () => window.removeEventListener("mouseup", handleMouseUp);
-  }, []);
-
-  useEffect(() => {
-    const handleDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === " " && (e.target as HTMLElement).tagName !== "INPUT") {
         setSpacePressed(true);
       }
     };
-    const handleUp = (e: KeyboardEvent) => {
-      if (e.key === " ") setSpacePressed(false);
-    }
 
-    window.addEventListener("keydown", handleDown);
-    window.addEventListener("keyup", handleUp);
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === " ") setSpacePressed(false);
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+      if (e.button === 1) setMMB(true);
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      setLMB(false);
+      setRMB(false);
+      setMMB(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+
     return () => {
-      window.removeEventListener("keydown", handleDown);
-      window.removeEventListener("keyup", handleUp);
-    }
-    
-  }, [])
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (query.trim().length === 0) return;
+    const delayDebounceFn = setTimeout(() => { searchCharacters(); }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [query]);
 
   return {
     boardRef, cells,
