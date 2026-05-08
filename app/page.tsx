@@ -2,6 +2,7 @@
 import { useAnimeBoard } from "./hooks/useAnimeBoard";
 import { Board } from "./components/Board";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { CustomSelect } from "./components/CustomSelect";
 
 export default function Home() {
   const {
@@ -17,7 +18,9 @@ export default function Home() {
     spacePressed, setSpacePressed,
     boardTitle, setBoardTitle,
     rows, setRows,
-    cols, setCols
+    cols, setCols,
+    source, setSource,
+    category, setCategory
   } = useAnimeBoard();
 
   return (
@@ -85,7 +88,7 @@ export default function Home() {
             downloadBoard();
             (e.target as HTMLButtonElement).blur();
           }}
-          className="text-sm bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-full transition-all active:scale-95 font-medium"
+          className="text-sm bg-blue-500 border-2 border-transparent hover:border-blue-300 px-4 py-2 rounded-full transition-all active:scale-95 font-medium"
         >
           Download
         </button>
@@ -93,15 +96,24 @@ export default function Home() {
 
       <aside className="fixed top-16 left-0 w-96 h-[calc(100vh-4rem)] bg-black/90 border-r border-gray-800 z-30 overflow-y-auto p-4">
         <div className="items-center p-4 flex flex-col gap-4 border-2 rounded-xl border-gray-700">
-          <input
-            className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-gray-900 outline-none border-gray-600 focus:border-blue-400 transition-all"
-            placeholder="=ω="
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              if (e.target.value.trim() === "") setResults([]);
-            }}
-          />
+          <div className="">
+            <div
+              className="flex gap-2 w-full p-2"
+            >
+              <CustomSelect options={["AL", "MAL"]} value={source} onChange={setSource} />
+              <CustomSelect options={["Characters", "Anime", "Manga", "Staff"]} value={category} onChange={setCategory} />
+            </div>
+            
+            <input
+              className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-gray-900 outline-none border-gray-600 focus:border-blue-400 transition-all"
+              placeholder="=ω="
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (e.target.value.trim() === "") setResults([]);
+              }}
+            />
+          </div>
 
           {results.length > 0 && (
             <div className="grid grid-cols-2 overflow-y-auto max-h-128 justify-items-center gap-4 p-4 pb-4 w-80 custom-scrollbar">
@@ -145,7 +157,7 @@ export default function Home() {
           disabled: !(spacePressed || mouseButtons.mmb),
           allowLeftClickPan: true,
           allowMiddleClickPan: true,
-          excluded: ["input", "button"],
+          excluded: ["input", "button", "select", "textarea"],
           velocityDisabled: true,
         }}
         onWheelStart={() => {}}

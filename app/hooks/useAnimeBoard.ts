@@ -16,6 +16,8 @@ export function useAnimeBoard() {
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
   const [boardTitle, setBoardTitle] = useState("");
+  const [source, setSource] = useState("AL");
+  const [category, setCategory] = useState("Characters");
   
   const STORAGE_KEY = "kiyo-anime-board-state";
 
@@ -37,19 +39,6 @@ export function useAnimeBoard() {
       }
     }, []);
 
-  // Don't wipe cells unnecessarily
-  useEffect(() => {
-      setCells((prev) => {
-        const newSize = rows * cols;
-        if (prev.length === newSize) return prev;
-        
-        const newCells = Array(newSize).fill(null).map((_, i) => 
-          prev[i] || { name: "", image: "" }
-        );
-        return newCells;
-      });
-    }, [rows, cols]);
-
   // Save to local storage
   useEffect(() => {
       if (cells.length === 0) return;
@@ -67,6 +56,20 @@ export function useAnimeBoard() {
   useEffect(() => {
     stateRef.current = { activeBrush, spacePressed, mouseButtons };
   }, [activeBrush, spacePressed, mouseButtons]);
+  
+  // Don't wipe cells unnecessarily
+  useEffect(() => {
+      setCells((prev) => {
+        const newSize = rows * cols;
+        if (prev.length === newSize) return prev;
+        
+        const newCells = Array(newSize).fill(null).map((_, i) => 
+          prev[i] || { name: "", image: "" }
+        );
+        return newCells;
+      });
+    }, [rows, cols]);
+
 
   const eraseCell = (index: number) => {
     setCells((prev) => {
@@ -277,5 +280,7 @@ export function useAnimeBoard() {
     spacePressed, setSpacePressed,
     rows, setRows,
     cols, setCols,
+    source, setSource,
+    category, setCategory
   };
 }
