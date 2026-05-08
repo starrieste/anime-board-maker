@@ -59,6 +59,22 @@ export function useAnimeBoard() {
     }
   };
 
+  const fillEarliest = (character: any) => {
+    setCells((prev) => {
+      const firstEmpty = prev.findIndex((cell) => !cell.image);
+
+      if (firstEmpty === -1) return prev; 
+
+      const newCells = [...prev];
+      newCells[firstEmpty] = {
+        name: character.name.full,
+        image: character.image.large
+      }
+      
+      return newCells;
+    })
+  };
+
   const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
 
   async function searchCharacters() {
@@ -206,6 +222,7 @@ export function useAnimeBoard() {
     results, setResults,
     handleMove,
     downloadBoard,
+    fillEarliest,
     activeBrush, setActiveBrush,
     mouseButtons, setMouseButtons,
     boardTitle, setBoardTitle,

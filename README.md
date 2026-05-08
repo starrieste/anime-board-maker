@@ -5,7 +5,6 @@ Modern anime board creation site! :3
 # To-Do List
 
 ### now
-- double click a button to add the character instantly to the earliest free spot on board
 - save progress locally in browser capability
 - transparent "ghost" for placing chars
 

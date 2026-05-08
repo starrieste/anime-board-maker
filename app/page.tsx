@@ -11,6 +11,7 @@ export default function Home() {
     downloadBoard,
     query, setQuery,
     results, setResults,
+    fillEarliest,
     activeBrush, setActiveBrush,
     mouseButtons, setMouseButtons,
     spacePressed, setSpacePressed,
@@ -72,6 +73,10 @@ export default function Home() {
                     img.crossOrigin = "anonymous";
                     img.src = char.image.large;
                     setActiveBrush(char);
+                  }}
+                  onDoubleClick={(e) => {
+                    e.preventDefault();
+                    fillEarliest(char);
                   }}
                   className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
                 >
