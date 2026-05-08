@@ -39,7 +39,7 @@ export function Board({
     >
       <div className="bg-white">
         <h1
-          className="text-4xl text-center text-black p-2 whitespace-pre-wrap break-words mx-auto"
+          className="text-4xl text-center text-black p-2 whitespace-pre-wrap wrap-break-word mx-auto"
           style={{
             maxWidth: `${totalWidth}px`,
             lineHeight: '1.2'
