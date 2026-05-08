@@ -31,16 +31,53 @@ export default function Home() {
           <h1 className="text-2xl font-bold">Kiyo :3</h1>
         </div>
 
-        <textarea
-          placeholder="Board title..."
-          value={boardTitle}
-          onChange={(e) => {
-            setBoardTitle(e.target.value);
-            if (e.target.value.trim() === "") setBoardTitle("");
-          }}
-          className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all resize-none h-10 overflow-hidden"
-          rows={1}
-        />
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-4">
+          <textarea
+            placeholder="Board title..."
+            value={boardTitle}
+            onChange={(e) => {
+              setBoardTitle(e.target.value);
+              if (e.target.value.trim() === "") setBoardTitle("");
+            }}
+            className="pointer-events-auto text-white bg-gray-900 text-center p-2 rounded-full border-2 w-64 outline-none border-gray-600 focus:border-blue-400 transition-all resize-none h-10 overflow-hidden"
+          />
+          
+          <div className="flex items-center bg-gray-900 border-2 border-gray-700 rounded-full px-3 py-1 gap-2">
+            <input
+              type="number"
+              min="0"
+              max="20"
+              value={rows === 0 ? "0" : rows.toString()}
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => {
+                const val = parseInt(e.target.value, 10);
+                if (isNaN(val)) {
+                  setRows(0);
+                } else {
+                  setRows(Math.min(20, val));
+                }
+              }}
+              className="w-8 bg-transparent text-center outline-none font-bold"
+            />
+            <span className="text-gray-500 text-xs font-bold">×</span>
+            <input
+                type="number"
+                min="0"
+                max="20"
+                value={cols === 0 ? "0" : cols.toString()}
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value, 10);
+                  if (isNaN(val)) {
+                    setCols(0);
+                  } else {
+                    setCols(Math.min(20, val));
+                  }
+                }}
+                className="w-8 bg-transparent text-center outline-none font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+          </div>
+        </div>
 
         <button
           onClick={(e) => {
@@ -57,7 +94,7 @@ export default function Home() {
       <aside className="fixed top-16 left-0 w-96 h-[calc(100vh-4rem)] bg-black/90 border-r border-gray-800 z-30 overflow-y-auto p-4">
         <div className="items-center p-4 flex flex-col gap-4 border-2 rounded-xl border-gray-700">
           <input
-            className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
+            className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-gray-900 outline-none border-gray-600 focus:border-blue-400 transition-all"
             placeholder="=ω="
             value={query}
             onChange={(e) => {

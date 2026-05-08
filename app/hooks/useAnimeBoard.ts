@@ -3,8 +3,8 @@ import { domToJpeg } from "modern-screenshot/dist/index.cjs";
 
 export function useAnimeBoard() {
   const boardRef = useRef<HTMLDivElement>(null);
-  const [rows, setRows] = useState(3);
-  const [cols, setCols] = useState(3);
+  const [rows, setRows] = useState(5);
+  const [cols, setCols] = useState(5);
   const [cells, setCells] = useState(Array(rows*cols).fill({ name: "", image: "" }));
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);

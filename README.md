@@ -10,12 +10,11 @@ Modern anime board creation site! :3
 
 ### soon
 - add ability to add anime, manga, and staff
-- custom board title
 - custom grid cell dimensions
 - custom images, custom titles
 
 - hit / to character search again
-- some form of keyboard controls for the results. double enter to add instantly, enter to select?
+- some form of keyboard controls for the results?
 
 ### later
 - option to use MAL images instead

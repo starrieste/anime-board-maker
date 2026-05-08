@@ -28,8 +28,8 @@ export function Board({
   const cellHeight = 230;
   const gap = 8;
 
-  const totalWidth = cols * cellWidth + (cols - 1) * gap;
-  const totalHeight = rows * cellHeight + (rows - 1) * gap;
+  const totalWidth = Math.max(1, cols) * cellWidth + (Math.max(1, cols) - 1) * gap;
+  const totalHeight = Math.max(1, rows) * cellHeight + (Math.max(1, rows) - 1) * gap;
   console.log(totalWidth);
 
   return (
