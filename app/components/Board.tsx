@@ -3,6 +3,7 @@ interface BoardProps {
   cells: any[];
   rows: number;
   cols: number;
+  boardTitle: string;
   spacePressed: boolean;
   mouseButtons: { lmb: boolean; rmb: boolean; mmb: boolean };
   setMouseButtons: (val: { lmb: boolean; mmb: boolean; rmb: boolean }) => void;
@@ -11,7 +12,6 @@ interface BoardProps {
     y: number,
     buttons: { lmb: boolean; rmb: boolean },
   ) => void;
-  boardTitle: string;
 }
 
 export function Board({
@@ -19,11 +19,10 @@ export function Board({
   cells,
   rows,
   cols,
-  mouseButtons,
-  setMouseButtons,
   handleMove,
-  spacePressed,
   boardTitle,
+  spacePressed,
+  mouseButtons, setMouseButtons,
 }: BoardProps) {
   const cellWidth = 160;
   const cellHeight = 230;

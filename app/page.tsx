@@ -7,20 +7,14 @@ export default function Home() {
   const {
     boardRef,
     cells,
-    query,
-    setQuery,
-    results,
-    setResults,
-    activeBrush,
-    setActiveBrush,
-    mouseButtons,
-    setMouseButtons,
-    spacePressed,
-    setSpacePressed,
-    boardTitle,
-    setBoardTitle,
     handleMove,
     downloadBoard,
+    query, setQuery,
+    results, setResults,
+    activeBrush, setActiveBrush,
+    mouseButtons, setMouseButtons,
+    spacePressed, setSpacePressed,
+    boardTitle, setBoardTitle,
   } = useAnimeBoard();
 
   return (
