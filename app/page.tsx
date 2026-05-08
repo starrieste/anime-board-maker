@@ -31,14 +31,15 @@ export default function Home() {
           <h1 className="text-2xl font-bold">Kiyo :3</h1>
         </div>
 
-        <input
+        <textarea
           placeholder="Board title..."
           value={boardTitle}
           onChange={(e) => {
             setBoardTitle(e.target.value);
             if (e.target.value.trim() === "") setBoardTitle("");
           }}
-          className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
+          className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all resize-none h-10 overflow-hidden"
+          rows={1}
         />
 
         <button

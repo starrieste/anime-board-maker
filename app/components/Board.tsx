@@ -38,7 +38,13 @@ export function Board({
       className="bg-black p-2 w-fit mx-auto border-4 border-white"
     >
       <div className="bg-white">
-        <h1 className="text-4xl text-center text-black p-2">
+        <h1
+          className="text-4xl text-center text-black p-2 whitespace-pre-wrap break-words mx-auto"
+          style={{
+            maxWidth: `${totalWidth}px`,
+            lineHeight: '1.2'
+          }}
+        >
           {boardTitle || "My Anime Board"}
         </h1>
       </div>
