@@ -10,7 +10,6 @@ Modern anime board creation site! :3
 
 ### soon
 - add ability to add anime, manga, and staff
-- custom grid dimensions
 - custom board title
 - custom grid cell dimensions
 - custom images, custom titles

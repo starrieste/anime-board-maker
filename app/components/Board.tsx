@@ -43,10 +43,11 @@ export function Board({
         </h1>
       </div>
       <div
-        className="grid bg-black grid-cols-5 pt-2 gap-2 mx-auto select-none"
+        className="grid bg-black pt-2 gap-2 mx-auto select-none"
         style={{
           width: `${totalWidth}px`,
           gridAutoRows: "min-content",
+          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`
         }}
         onContextMenu={(e) => e.preventDefault()}
         onMouseDown={(e) => {

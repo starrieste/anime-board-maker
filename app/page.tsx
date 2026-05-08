@@ -16,6 +16,8 @@ export default function Home() {
     mouseButtons, setMouseButtons,
     spacePressed, setSpacePressed,
     boardTitle, setBoardTitle,
+    rows, setRows,
+    cols, setCols
   } = useAnimeBoard();
 
   return (
@@ -111,8 +113,8 @@ export default function Home() {
         onWheelStart={() => {}}
         initialScale={0.6}
         centerOnInit={true}
-        minScale={0.5}
-        maxScale={2}
+        minScale={0.4}
+        maxScale={1.5}
         limitToBounds={false}
         smooth={false}
         wheel={{ step: 0.1 }}
@@ -121,8 +123,8 @@ export default function Home() {
           <Board
             boardRef={boardRef}
             cells={cells}
-            rows={5}
-            cols={5}
+            rows={rows}
+            cols={cols}
             spacePressed={spacePressed}
             handleMove={handleMove}
             boardTitle={boardTitle}

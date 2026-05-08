@@ -3,7 +3,9 @@ import { domToJpeg } from "modern-screenshot/dist/index.cjs";
 
 export function useAnimeBoard() {
   const boardRef = useRef<HTMLDivElement>(null);
-  const [cells, setCells] = useState(Array(25).fill({ name: "", image: "" }));
+  const [rows, setRows] = useState(6);
+  const [cols, setCols] = useState(6);
+  const [cells, setCells] = useState(Array(rows*cols).fill({ name: "", image: "" }));
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [mouseButtons, setMouseButtons] = useState({
@@ -14,6 +16,10 @@ export function useAnimeBoard() {
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
   const [boardTitle, setBoardTitle] = useState("");
+
+  useEffect(() => {
+    setCells(Array(rows * cols).fill({ name: "", image: "" }));
+  }, [rows, cols]);
 
   const stateRef = useRef({ activeBrush, spacePressed, mouseButtons });
   useEffect(() => {
@@ -227,5 +233,7 @@ export function useAnimeBoard() {
     mouseButtons, setMouseButtons,
     boardTitle, setBoardTitle,
     spacePressed, setSpacePressed,
+    rows, setRows,
+    cols, setCols,
   };
 }
