@@ -4,24 +4,31 @@ import { Board } from "./components/Board";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 export default function Home() {
-  const { 
-    boardRef, cells,
-    query, setQuery,
-    results, setResults, 
-    activeBrush, setActiveBrush,
-    mouseButtons, setMouseButtons,
-    spacePressed, setSpacePressed,
-    boardTitle, setBoardTitle,
-    handleMove, downloadBoard
+  const {
+    boardRef,
+    cells,
+    query,
+    setQuery,
+    results,
+    setResults,
+    activeBrush,
+    setActiveBrush,
+    mouseButtons,
+    setMouseButtons,
+    spacePressed,
+    setSpacePressed,
+    boardTitle,
+    setBoardTitle,
+    handleMove,
+    downloadBoard,
   } = useAnimeBoard();
 
   return (
     <main
       className={`relative w-screen h-screen overflow-hidden bg-[#0f0f0f] ${
         spacePressed ? "cursor-grab active:cursor-grabbing" : "cursor-crosshair"
-        }`}
+      }`}
     >
-      
       <nav className="fixed top-0 left-0 right-0 h-16 bg-black/80 backdrop-blur-md border-b border-gray-800 z-50 flex items-center justify-between px-8">
         <div className="flex items-baseline gap-2">
           <h1 className="text-2xl font-bold">Kiyo :3</h1>
@@ -36,9 +43,8 @@ export default function Home() {
           }}
           className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
         />
-          
 
-        <button 
+        <button
           onClick={(e) => {
             e.stopPropagation();
             downloadBoard();
@@ -52,16 +58,16 @@ export default function Home() {
 
       <aside className="fixed top-16 left-0 w-96 h-[calc(100vh-4rem)] bg-black/90 border-r border-gray-800 z-30 overflow-y-auto p-4">
         <div className="items-center p-4 flex flex-col gap-4 border-2 rounded-xl border-gray-700">
-          <input 
-          className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
-          placeholder="=ω="
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            if (e.target.value.trim() === "") setResults([]);
-          }}
+          <input
+            className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-transparent outline-none border-gray-600 focus:border-blue-400 transition-all"
+            placeholder="=ω="
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              if (e.target.value.trim() === "") setResults([]);
+            }}
           />
-  
+
           {results.length > 0 && (
             <div className="grid grid-cols-2 overflow-y-auto max-h-128 justify-items-center gap-4 p-4 pb-4 w-80 custom-scrollbar">
               {results.map((char, i) => (
@@ -83,7 +89,9 @@ export default function Home() {
                       draggable="false"
                     />
                   </div>
-                  <p className="text-xs text-center font-medium truncate w-full">{char.name.full}</p>
+                  <p className="text-xs text-center font-medium truncate w-full">
+                    {char.name.full}
+                  </p>
                 </button>
               ))}
             </div>
@@ -91,16 +99,15 @@ export default function Home() {
         </div>
       </aside>
 
-      <div className="fixed top-20 left-0 right-0 z-40 flex flex-col items-center pointer-events-none">
-      </div>
-      
+      <div className="fixed top-20 left-0 right-0 z-40 flex flex-col items-center pointer-events-none"></div>
+
       <TransformWrapper
         panning={{
           disabled: !(spacePressed || mouseButtons.mmb),
           allowLeftClickPan: true,
           allowMiddleClickPan: true,
           excluded: ["input", "button"],
-          velocityDisabled: true
+          velocityDisabled: true,
         }}
         onWheelStart={() => {}}
         initialScale={0.6}
@@ -112,13 +119,13 @@ export default function Home() {
         wheel={{ step: 0.1 }}
       >
         <TransformComponent wrapperClass="!w-screen !h-screen">
-          <Board 
-            boardRef={boardRef} 
+          <Board
+            boardRef={boardRef}
             cells={cells}
             rows={5}
             cols={5}
             spacePressed={spacePressed}
-            handleMove={handleMove} 
+            handleMove={handleMove}
             boardTitle={boardTitle}
             mouseButtons={mouseButtons}
             setMouseButtons={setMouseButtons}
@@ -128,11 +135,13 @@ export default function Home() {
 
       {activeBrush && (
         <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Selected</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+            Selected
+          </p>
           <div className="bg-black/90 border-2 border-blue-500 rounded-xl overflow-hidden w-32 shadow-2xl shadow-indigo-500/20">
-            <img 
-              src={activeBrush.image.large} 
-              alt={activeBrush.name.full} 
+            <img
+              src={activeBrush.image.large}
+              alt={activeBrush.name.full}
               className="w-full h-40 object-cover"
             />
             <div className="p-2 bg-blue-500">
@@ -143,7 +152,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
     </main>
   );
 }

@@ -6,7 +6,11 @@ export function useAnimeBoard() {
   const [cells, setCells] = useState(Array(25).fill({ name: "", image: "" }));
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
-  const [mouseButtons, setMouseButtons] = useState({ lmb: false, rmb: false, mmb: false });
+  const [mouseButtons, setMouseButtons] = useState({
+    lmb: false,
+    rmb: false,
+    mmb: false,
+  });
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
   const [boardTitle, setBoardTitle] = useState("");
@@ -17,7 +21,7 @@ export function useAnimeBoard() {
   }, [activeBrush, spacePressed, mouseButtons]);
 
   const eraseCell = (index: number) => {
-    setCells(prev => {
+    setCells((prev) => {
       const newCells = [...prev];
       newCells[index] = { name: "", image: "" };
       return newCells;
@@ -27,48 +31,54 @@ export function useAnimeBoard() {
   const paintCell = (index: number) => {
     const currentBrush = stateRef.current.activeBrush;
     if (!currentBrush) return;
-    setCells(prev => {
+    setCells((prev) => {
       const newCells = [...prev];
-      newCells[index] = { name: currentBrush.name.full, image: currentBrush.image.large };
+      newCells[index] = {
+        name: currentBrush.name.full,
+        image: currentBrush.image.large,
+      };
       return newCells;
     });
   };
 
   const handleMove = (clientX: number, clientY: number, buttons: any) => {
     const { lmb, rmb } = buttons;
-    
-    if (stateRef.current.spacePressed || stateRef.current.mouseButtons.mmb) return;
+
+    if (stateRef.current.spacePressed || stateRef.current.mouseButtons.mmb)
+      return;
     if (!lmb && !rmb) return;
-  
+
     const target = document.elementFromPoint(clientX, clientY) as HTMLElement;
-    const cellIndex = target?.closest('[data-index]')?.getAttribute('data-index');
+    const cellIndex = target
+      ?.closest("[data-index]")
+      ?.getAttribute("data-index");
     if (cellIndex !== null && cellIndex !== undefined) {
       const idx = Number(cellIndex);
       if (lmb) paintCell(idx);
       else if (rmb) eraseCell(idx);
     }
   };
-  
+
   const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
-  
+
   async function searchCharacters() {
     if (!query) return;
-    const response = await fetch('https://graphql.anilist.co', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query: `query ($search: String) { Page(perPage: 15) { characters(search: $search) { name { full native } image { large } } } }`,
-        variables: { search: query }
-      })
+        variables: { search: query },
+      }),
     });
     const data = await response.json();
     const characters = data.data.Page.characters;
-  
+
     const newUrls = new Set(characters.map((c: any) => c.image.large));
     for (const [url] of preloadedImagesRef.current) {
       if (!newUrls.has(url)) preloadedImagesRef.current.delete(url);
     }
-  
+
     for (const char of characters) {
       if (!preloadedImagesRef.current.has(char.image.large)) {
         const img = new Image();
@@ -77,47 +87,47 @@ export function useAnimeBoard() {
         preloadedImagesRef.current.set(char.image.large, img);
       }
     }
-  
+
     setResults(characters);
   }
-  
+
   async function downloadBoard() {
     if (!boardRef.current) return;
-  
+
     const dataUrl = await domToJpeg(boardRef.current, {
       quality: 0.9,
       scale: 2,
-      
+
       width: boardRef.current.offsetWidth,
       height: boardRef.current.offsetHeight,
-      
+
       onCloneNode: (node) => {
         const el = node as HTMLElement;
-  
-        el.style.transform = 'none';
-        el.style.margin = '0';
-        el.style.padding = '1';
-        el.style.display = 'flex';
-        el.style.flexDirection = 'column';
-  
+
+        el.style.transform = "none";
+        el.style.margin = "0";
+        el.style.padding = "1";
+        el.style.display = "flex";
+        el.style.flexDirection = "column";
+
         const titleDiv = el.children[0] as HTMLElement;
         if (titleDiv) {
-          titleDiv.style.marginTop = '0px'; 
+          titleDiv.style.marginTop = "0px";
         }
 
         const titleText = titleDiv.children[0] as HTMLElement;
         if (titleText) {
-          titleText.style.marginTop = '1px';
+          titleText.style.marginTop = "1px";
         }
-  
-        const gridDiv = el.querySelector('.grid') as HTMLElement;
+
+        const gridDiv = el.querySelector(".grid") as HTMLElement;
         if (gridDiv) {
-          gridDiv.style.transform = 'none';
-          gridDiv.style.marginTop = '0px'; 
+          gridDiv.style.transform = "none";
+          gridDiv.style.marginTop = "0px";
         }
       },
     });
-  
+
     const link = document.createElement("a");
     link.download = "anime-board.jpg";
     link.href = dataUrl;
@@ -140,10 +150,18 @@ export function useAnimeBoard() {
         document.activeElement.blur();
       }
 
-      setMouseButtons(prev => ({ ...prev, lmb: e.button === 0, mmb: e.button === 1, rmb: e.button === 2 }));
-      handleMove(e.clientX, e.clientY, { lmb: e.button === 0, rmb: e.button === 2 });
+      setMouseButtons((prev) => ({
+        ...prev,
+        lmb: e.button === 0,
+        mmb: e.button === 1,
+        rmb: e.button === 2,
+      }));
+      handleMove(e.clientX, e.clientY, {
+        lmb: e.button === 0,
+        rmb: e.button === 2,
+      });
     };
-    
+
     const handleMouseUp = (e: MouseEvent) => {
       setMouseButtons({ lmb: false, mmb: false, rmb: false });
     };
@@ -175,18 +193,28 @@ export function useAnimeBoard() {
 
   useEffect(() => {
     if (query.trim().length === 0) return;
-    const delayDebounceFn = setTimeout(() => { searchCharacters(); }, 500);
+    const delayDebounceFn = setTimeout(() => {
+      searchCharacters();
+    }, 500);
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
   return {
-    boardRef, cells,
-    query, setQuery,
-    results, setResults,
-    activeBrush, setActiveBrush,
-    mouseButtons, setMouseButtons,
-    boardTitle, setBoardTitle,
-    spacePressed, setSpacePressed,
-    handleMove, downloadBoard
+    boardRef,
+    cells,
+    query,
+    setQuery,
+    results,
+    setResults,
+    activeBrush,
+    setActiveBrush,
+    mouseButtons,
+    setMouseButtons,
+    boardTitle,
+    setBoardTitle,
+    spacePressed,
+    setSpacePressed,
+    handleMove,
+    downloadBoard,
   };
 }
