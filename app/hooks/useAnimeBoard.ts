@@ -49,6 +49,8 @@ export function useAnimeBoard() {
     }
   };
   
+  const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  
   async function searchCharacters() {
     if (!query) return;
     const response = await fetch('https://graphql.anilist.co', {
@@ -60,7 +62,23 @@ export function useAnimeBoard() {
       })
     });
     const data = await response.json();
-    setResults(data.data.Page.characters);
+    const characters = data.data.Page.characters;
+  
+    const newUrls = new Set(characters.map((c: any) => c.image.large));
+    for (const [url] of preloadedImagesRef.current) {
+      if (!newUrls.has(url)) preloadedImagesRef.current.delete(url);
+    }
+  
+    for (const char of characters) {
+      if (!preloadedImagesRef.current.has(char.image.large)) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = char.image.large;
+        preloadedImagesRef.current.set(char.image.large, img);
+      }
+    }
+  
+    setResults(characters);
   }
   
   async function downloadBoard() {

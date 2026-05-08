@@ -52,7 +52,7 @@ export function Board({
         {cells.map((cell, index) => (
           <div key={index} data-index={index} className="w-40 h-50 bg-white cursor-crosshair transition-all hover:border-blue-300">
             {cell.image && (
-              <img src={cell.image} alt={cell.name} crossOrigin="anonymous" className="w-full h-full object-cover pointer-events-none"/>
+              <img src={cell.image || ""} alt={cell.name} crossOrigin="anonymous" className="w-full h-full object-cover pointer-events-none"/>
             )}
           </div>
         ))}

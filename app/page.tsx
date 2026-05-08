@@ -68,10 +68,10 @@ export default function Home() {
                 <button
                   key={i}
                   onClick={() => {
-                    const img = new Image()
-                    img.crossOrigin = "anonymous"
-                    img.src = char.image.large
-                    setActiveBrush(char)
+                    const img = new Image();
+                    img.crossOrigin = "anonymous";
+                    img.src = char.image.large;
+                    setActiveBrush(char);
                   }}
                   className="flex flex-col pointer-events-auto w-full group items-center gap-2 transition-transform hover:scale-105"
                 >
@@ -127,8 +127,8 @@ export default function Home() {
       </TransformWrapper>
 
       {activeBrush && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Selected Brush</p>
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Selected</p>
           <div className="bg-black/90 border-2 border-blue-500 rounded-xl overflow-hidden w-32 shadow-2xl shadow-indigo-500/20">
             <img 
               src={activeBrush.image.large} 
