@@ -30,7 +30,6 @@ export function Board({
 
   const totalWidth = Math.max(1, cols) * cellWidth + (Math.max(1, cols) - 1) * gap;
   const totalHeight = Math.max(1, rows) * cellHeight + (Math.max(1, rows) - 1) * gap;
-  console.log(totalWidth);
 
   return (
     <div

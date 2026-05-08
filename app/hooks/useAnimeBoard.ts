@@ -16,10 +16,52 @@ export function useAnimeBoard() {
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
   const [boardTitle, setBoardTitle] = useState("");
+  
+  const STORAGE_KEY = "kiyo-anime-board-state";
 
+  // Load from local storage
   useEffect(() => {
-    setCells(Array(rows * cols).fill({ name: "", image: "" }));
-  }, [rows, cols]);
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setRows(parsed.rows || 5);
+          setCols(parsed.cols || 5);
+          setCells(parsed.cells || []);
+          setBoardTitle(parsed.boardTitle || "");
+        } catch (e) {
+          console.error("Failed to load board state", e);
+        }
+      } else {
+        setCells(Array(5 * 5).fill({ name: "", image: "" }));
+      }
+    }, []);
+
+  // Don't wipe cells unnecessarily
+  useEffect(() => {
+      setCells((prev) => {
+        const newSize = rows * cols;
+        if (prev.length === newSize) return prev;
+        
+        const newCells = Array(newSize).fill(null).map((_, i) => 
+          prev[i] || { name: "", image: "" }
+        );
+        return newCells;
+      });
+    }, [rows, cols]);
+
+  // Save to local storage
+  useEffect(() => {
+      if (cells.length === 0) return;
+  
+      const stateToSave = {
+        rows,
+        cols,
+        cells,
+        boardTitle
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+    }, [rows, cols, cells, boardTitle]);
 
   const stateRef = useRef({ activeBrush, spacePressed, mouseButtons });
   useEffect(() => {
