@@ -15,14 +15,10 @@ interface SidebarProps {
 }
 
 export function Sidebar({
-  query,
-  setQuery,
-  results,
-  setResults,
-  source,
-  setSource,
-  category,
-  setCategory,
+  query, setQuery,
+  results, setResults,
+  source, setSource,
+  category, setCategory,
   setActiveBrush,
   fillEarliest,
 }: SidebarProps) { 

@@ -128,7 +128,7 @@ export function useAnimeBoard() {
 
   const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
 
-  async function searchCharacters() {
+  async function search() {
     if (!query) return;
     const response = await fetch("https://graphql.anilist.co", {
       method: "POST",
@@ -261,7 +261,7 @@ export function useAnimeBoard() {
   useEffect(() => {
     if (query.trim().length === 0) return;
     const delayDebounceFn = setTimeout(() => {
-      searchCharacters();
+      search();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
