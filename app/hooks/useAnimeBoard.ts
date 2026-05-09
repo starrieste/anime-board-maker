@@ -170,7 +170,6 @@ export function useAnimeBoard() {
       return {
         name: {
           full: isMedia ? (item.title.english || item.title.romaji) : item.name.full,
-          native: isMedia ? item.title.romaji : item.name.native,
         },
         image: {
           large: isMedia ? item.coverImage.large : item.image.large,
