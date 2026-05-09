@@ -68,7 +68,7 @@ export function Board({
           <div
             key={index}
             data-index={index}
-            className="w-40 h-50 bg-white cursor-crosshair transition-all hover:border-blue-300"
+            className="w-40 h-56 bg-white cursor-crosshair transition-all hover:ring-4 hover:ring-blue-500"
           >
             {cell.image && (
               <img
