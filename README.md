@@ -5,19 +5,25 @@ Modern anime board creation site! :3
 # To-Do List
 
 ### now
-- save progress locally in browser capability
 - transparent "ghost" for placing chars
+- fix losing grid cells when resizing
+- add ability to add anime, manga, and staff
+- hit / to search again
 
 ### soon
-- add ability to add anime, manga, and staff
 - custom grid cell dimensions
 - custom images, custom titles
 
-- hit / to character search again
 - some form of keyboard controls for the results?
+- option to use MAL images instead
+
+- drag tool, where you can drag a cell, move it, or even swap it with other cells easily. (maybe cool animations with this)
+- select tool, where clicking grid cells will select it instead of paint.
+- eye dropper tool to eye drop another cell
+- right side bar where you can look at individual cells and change title or image.
+- eraser tool and paint tool
 
 ### later
-- option to use MAL images instead
 - cross off boxes, hide names & icon, reveals
 - undo/redo system
 
@@ -25,11 +31,6 @@ Modern anime board creation site! :3
 
 - bulk import: user enters a list of entries comma separated or something, site automatically inserts
 - export: site exports board into entries comma separated or something.
-
-- drag tool, where you can drag a cell, move it, or even swap it with other cells easily. (maybe cool animations with this)
-- select tool, where clicking grid cells will select it instead of paint.
-- eye dropper tool to eye drop another cell
-- right side bar where you can look at individual cells and change title or image.
 
 ### way later
 - templates
