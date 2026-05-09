@@ -16,6 +16,7 @@ export function useAnimeBoard() {
   const [activeBrush, setActiveBrush] = useState<any | null>(null);
   const [spacePressed, setSpacePressed] = useState(false);
   const [boardTitle, setBoardTitle] = useState("");
+  
   const [source, setSource] = useState("AL");
   const [category, setCategory] = useState("Characters");
   
@@ -128,25 +129,61 @@ export function useAnimeBoard() {
 
   const preloadedImagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
 
+  const QUERY_CONFIGS: Record<string, any> = {
+    Characters: {
+      field: "characters",
+      query: `query ($search: String) { Page(perPage: 15) { characters(search: $search) { name { full native } image { large } } } }`
+    },
+    Anime: {
+      field: "media",
+      query: `query ($search: String) { Page(perPage: 15) { media(search: $search, type: ANIME) { title { english romaji } coverImage { large } } } }`
+    },
+    Manga: {
+      field: "media",
+      query: `query ($search: String) { Page(perPage: 15) { media(search: $search, type: MANGA) { title { english romaji } coverImage { large } } } }`
+    },
+    Staff: {
+      field: "staff",
+      query: `query ($search: String) { Page(perPage: 15) { staff(search: $search) { name { full native } image { large } } } }`
+    }
+  };
+
   async function search() {
     if (!query) return;
+
+    const config = QUERY_CONFIGS[category];
+
     const response = await fetch("https://graphql.anilist.co", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        query: `query ($search: String) { Page(perPage: 15) { characters(search: $search) { name { full native } image { large } } } }`,
+        query: config.query,
         variables: { search: query },
       }),
     });
-    const data = await response.json();
-    const characters = data.data.Page.characters;
+    
+    const result = await response.json();
+    const rawData = result.data.Page[config.field];
 
-    const newUrls = new Set(characters.map((c: any) => c.image.large));
+    const normalized = rawData.map((item: any) => {
+      const isMedia = category === "Anime" || category === "Manga";
+      return {
+        name: {
+          full: isMedia ? (item.title.english || item.title.romaji) : item.name.full,
+          native: isMedia ? item.title.romaji : item.name.native,
+        },
+        image: {
+          large: isMedia ? item.coverImage.large : item.image.large,
+        }
+      }
+    });
+
+    const newUrls = new Set(normalized.map((c: any) => c.image.large));
     for (const [url] of preloadedImagesRef.current) {
       if (!newUrls.has(url)) preloadedImagesRef.current.delete(url);
     }
 
-    for (const char of characters) {
+    for (const char of normalized) {
       if (!preloadedImagesRef.current.has(char.image.large)) {
         const img = new Image();
         img.crossOrigin = "anonymous";
@@ -155,7 +192,7 @@ export function useAnimeBoard() {
       }
     }
 
-    setResults(characters);
+    setResults(normalized);
   }
 
   async function downloadBoard() {
@@ -259,12 +296,16 @@ export function useAnimeBoard() {
   }, []);
 
   useEffect(() => {
-    if (query.trim().length === 0) return;
+    if (query.trim().length === 0) {
+      setResults([]);
+      return;
+    }
     const delayDebounceFn = setTimeout(() => {
       search();
     }, 500);
+    
     return () => clearTimeout(delayDebounceFn);
-  }, [query]);
+  }, [query, category]);
 
   return {
     boardRef,
