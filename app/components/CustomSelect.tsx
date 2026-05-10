@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 
-export function CustomSelect({ options, value, onChange }: {
+export function CustomSelect({ options, value, onChange, className }: {
   options: string[];
   value: string;
   onChange: (val: string) => void;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -19,18 +20,18 @@ export function CustomSelect({ options, value, onChange }: {
   }, []);
 
   return (
-    <div ref={ref} className="relative flex-1">
+    <div ref={ref} className={`relative flex-1 ${className ?? ""}`}>
       <button
         onMouseDown={(e) => {
           e.stopPropagation();
           setOpen((prev) => !prev);
         }}
-        className="w-full bg-gray-900 text-white text-xs border-2 border-gray-600 rounded-full px-2 py-2 outline-none hover:border-blue-400 transition-all text-center"
+        className="w-full text-white text-xs px-2 py-2 outline-none transition-all text-center"
       >
         {value}
       </button>
       {open && (
-        <div className="absolute top-full mt-1 left-0 w-full bg-gray-900 border-2 border-gray-600 rounded-xl z-[9999] overflow-hidden shadow-xl">
+        <div className="absolute top-full mt-1 left-0 w-full border-2 border-gray-600 rounded-xl overflow-hidden shadow-xl">
           {options.map((opt) => (
             <button
               key={opt}

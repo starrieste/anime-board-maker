@@ -5,6 +5,8 @@ export function useAnimeBoard() {
   const boardRef = useRef<HTMLDivElement>(null);
   const [rows, setRows] = useState(5);
   const [cols, setCols] = useState(5);
+  const [cellWidth, setCellWidth] = useState(160);
+  const [cellHeight, setCellHeight] = useState(220);
   const [cells, setCells] = useState(Array(rows*cols).fill({ name: "", image: "" }));
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
@@ -17,7 +19,6 @@ export function useAnimeBoard() {
   const [spacePressed, setSpacePressed] = useState(false);
   const [boardTitle, setBoardTitle] = useState("");
   
-  const [source, setSource] = useState("AL");
   const [category, setCategory] = useState("Characters");
   
   const STORAGE_KEY = "kiyo-anime-board-state";
@@ -30,6 +31,8 @@ export function useAnimeBoard() {
           const parsed = JSON.parse(saved);
           setRows(parsed.rows || 5);
           setCols(parsed.cols || 5);
+          setCellWidth(parsed.cellWidth || 160);
+          setCellHeight(parsed.cellHeight || 230);
           setCells(parsed.cells || []);
           setBoardTitle(parsed.boardTitle || "");
         } catch (e) {
@@ -48,10 +51,12 @@ export function useAnimeBoard() {
         rows,
         cols,
         cells,
-        boardTitle
+        boardTitle,
+        cellWidth,
+        cellHeight
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
-    }, [rows, cols, cells, boardTitle]);
+    }, [rows, cols, cellWidth, cellHeight, cells, boardTitle]);
 
   const stateRef = useRef({ activeBrush, spacePressed, mouseButtons });
   useEffect(() => {
@@ -148,7 +153,23 @@ export function useAnimeBoard() {
     }
   };
 
-  async function search() {
+  const preloadImages = (normalized: any[]) => {
+    const newUrls = new Set(normalized.map((c: any) => c.image.large));
+    for (const [url] of preloadedImagesRef.current) {
+      if (!newUrls.has(url)) preloadedImagesRef.current.delete(url);
+    }
+
+    for (const char of normalized) {
+      if (!preloadedImagesRef.current.has(char.image.large)) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = char.image.large;
+        preloadedImagesRef.current.set(char.image.large, img);
+      }
+    }
+  }
+
+  async function searchAniList() {
     if (!query) return;
 
     const config = QUERY_CONFIGS[category];
@@ -177,20 +198,7 @@ export function useAnimeBoard() {
       }
     });
 
-    const newUrls = new Set(normalized.map((c: any) => c.image.large));
-    for (const [url] of preloadedImagesRef.current) {
-      if (!newUrls.has(url)) preloadedImagesRef.current.delete(url);
-    }
-
-    for (const char of normalized) {
-      if (!preloadedImagesRef.current.has(char.image.large)) {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = char.image.large;
-        preloadedImagesRef.current.set(char.image.large, img);
-      }
-    }
-
+    preloadImages(normalized);
     setResults(normalized);
   }
 
@@ -249,7 +257,12 @@ export function useAnimeBoard() {
     };
 
     const handleMouseDown = (e: MouseEvent) => {
-      if (document.activeElement instanceof HTMLElement) {
+      if (
+        document.activeElement instanceof HTMLElement && 
+        e.target instanceof HTMLElement && 
+        e.target.tagName !== 'INPUT' && 
+        e.target.tagName !== 'TEXTAREA'
+      ) {
         document.activeElement.blur();
       }
 
@@ -300,7 +313,7 @@ export function useAnimeBoard() {
       return;
     }
     const delayDebounceFn = setTimeout(() => {
-      search();
+      searchAniList();
     }, 500);
     
     return () => clearTimeout(delayDebounceFn);
@@ -320,7 +333,8 @@ export function useAnimeBoard() {
     spacePressed, setSpacePressed,
     rows, setRows,
     cols, setCols,
-    source, setSource,
-    category, setCategory
+    category, setCategory,
+    cellWidth, setCellWidth,
+    cellHeight, setCellHeight
   };
 }

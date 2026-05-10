@@ -6,8 +6,6 @@ interface SidebarProps {
   setQuery: (val: string) => void;
   results: any[];
   setResults: (val: any[]) => void;
-  source: string;
-  setSource: (val: string) => void;
   category: string;
   setCategory: (val: string) => void;
   setActiveBrush: (char: any) => void;
@@ -17,7 +15,6 @@ interface SidebarProps {
 export function Sidebar({
   query, setQuery,
   results, setResults,
-  source, setSource,
   category, setCategory,
   setActiveBrush,
   fillEarliest,
@@ -27,21 +24,25 @@ export function Sidebar({
       <div className="items-center p-4 flex flex-col gap-4 border-2 rounded-xl border-gray-700">
         <div className="">
           <div
-            className="flex gap-2 w-full p-2"
+            className="flex w-full border-2 rounded-full border-gray-600"
           >
-            <CustomSelect options={["AL", "MAL"]} value={source} onChange={setSource} />
-            <CustomSelect options={["Characters", "Anime", "Manga", "Staff"]} value={category} onChange={setCategory} />
+            <CustomSelect
+              options={["Characters", "Anime", "Manga", "Staff"]}
+              value={category}
+              onChange={setCategory}
+              className="rounded-l-full border-2 border-transparent hover:border-blue-400 bg-gray-900"
+            />
+            
+            <input
+              className="pointer-events-auto text-white text-center w-64 rounded-r-full bg-gray-900 outline-none transition-all border-2 border-transparent focus:border-blue-500"
+              placeholder="=ω="
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (e.target.value.trim() === "") setResults([]);
+              }}
+            />
           </div>
-          
-          <input
-            className="pointer-events-auto text-white text-center p-2 rounded-full border-2 w-64 bg-gray-900 outline-none border-gray-600 focus:border-blue-400 transition-all"
-            placeholder="=ω="
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              if (e.target.value.trim() === "") setResults([]);
-            }}
-          />
         </div>
     
         {results.length > 0 && (

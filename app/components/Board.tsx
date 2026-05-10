@@ -7,6 +7,8 @@ interface BoardProps {
   spacePressed: boolean;
   mouseButtons: { lmb: boolean; rmb: boolean; mmb: boolean };
   setMouseButtons: (val: { lmb: boolean; mmb: boolean; rmb: boolean }) => void;
+  cellWidth: number;
+  cellHeight: number;
   handleMove: (
     x: number,
     y: number,
@@ -23,9 +25,8 @@ export function Board({
   boardTitle,
   spacePressed,
   mouseButtons, setMouseButtons,
+  cellWidth, cellHeight
 }: BoardProps) {
-  const cellWidth = 160;
-  const cellHeight = 230;
   const gap = 8;
 
   const totalWidth = Math.max(1, cols) * cellWidth + (Math.max(1, cols) - 1) * gap;
@@ -68,7 +69,8 @@ export function Board({
           <div
             key={index}
             data-index={index}
-            className="w-40 h-56 bg-white cursor-crosshair transition-all hover:ring-4 hover:ring-blue-500"
+            style={{ width: `${cellWidth}px`, height: `${cellHeight}px` }}
+            className="bg-white cursor-crosshair transition-all hover:ring-4 hover:ring-blue-500"
           >
             {cell.image && (
               <img
