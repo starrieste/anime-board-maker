@@ -1,21 +1,16 @@
 # Kiyo Anime Boards
 
-Modern anime board creation site! :3
+Modern anime/character board creation site :>
 
 # To-Do List
 
 ### now
 - transparent "ghost" for placing chars
 - fix losing grid cells when resizing
-- add ability to add anime, manga, and staff
 - hit / to search again
 
 ### soon
-- custom grid cell dimensions
-- custom images, custom titles
-
-- some form of keyboard controls for the results?
-- option to use MAL images instead
+- custom images
 
 - drag tool, where you can drag a cell, move it, or even swap it with other cells easily. (maybe cool animations with this)
 - select tool, where clicking grid cells will select it instead of paint.
